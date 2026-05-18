@@ -23,13 +23,13 @@ TT_LPAREN = 'TT_LPAREN'
 TT_RPAREN = 'TT_RPAREN'
 
 class Token:
-    def __init__(sels, type_, value):
+    def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
 
     def __repr__(self):
-        if self.value: return f'{self.type}:{self:value}'
-        return f'self.type'  
+        if self.value: return f'{self.type}:{self.value}'
+        return f'{self.type}'  
 
 class Lexer:
     def __init__(self, text):
@@ -40,7 +40,7 @@ class Lexer:
 
     def advance(self):
         self.pos += 1    
-        self.current_char = self.text[pos] if self.pos < len(self.text) else None
+        self.current_char = self.text[self.pos] if self.pos < len(self.text) else None
 
     def make_tokens(self):
         tokens = []
@@ -86,8 +86,15 @@ class Lexer:
                 num_str += '.'
             else:
                 num_str += self.current_char
+            self.advance()    
 
         if dot_count == 0:
             return Token(TT_INT, int(num_str))
         else: 
             return Token(TT_FLOAT, float(num_str))
+
+def run(text):
+    lexer = Lexer(text)
+    tokens, error = lexer.make_tokens()
+
+    return tokens, error
