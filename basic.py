@@ -149,7 +149,11 @@ class Parser:
         return self.current_tok      
 
     def factor():
-        pass     
+        tok = self.current_tok
+
+        if tok.type in (TT_INT, TT_FLOAT):
+            self.advance()
+            return NumberNode(tok)
 
     def term():
         pass
