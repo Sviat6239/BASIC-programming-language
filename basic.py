@@ -137,7 +137,7 @@ class BinOpNode:
 
 
 class Parser:
-    def __init(tokens):
+    def __init(self, tokens):
         self.tokens = tokens
         self.tok_idx = 1
         self.advance()
@@ -156,7 +156,14 @@ class Parser:
             return NumberNode(tok)
 
     def term():
-        pass
+        left = self.factor()
+
+        while self.current_tok in (TT_MUL, TT_DIV):
+            op_tok = self.current_tok
+            right = self.factor()
+            left = BinOpNode(left, op_tok, right)
+
+        return left
 
     def expr():
         pass
