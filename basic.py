@@ -146,7 +146,10 @@ class Parser:
         self.tok_idx = 1
         if self.tok_idx < len(self.tokens):
             self.current_tok = self.tokens[self.tok_idx]
-        return self.current_tok      
+        return self.current_tok
+
+    def parse(self):
+        res = self.expr
 
     def factor():
         tok = self.current_tok
@@ -156,17 +159,20 @@ class Parser:
             return NumberNode(tok)
 
     def term():
-        left = self.factor()
+        return self.bin_op(self.factor, (TT_MUL, TT_DIV))
 
-        while self.current_tok in (TT_MUL, TT_DIV):
+    def expr():
+        return self.bin_op(self.term, (TT_PLUS, TT_MINUS))
+
+    def bin_op(self, func, ops):
+        left = self.func()
+
+        while self.current_tok in ops:
             op_tok = self.current_tok
-            right = self.factor()
+            right = self.func()
             left = BinOpNode(left, op_tok, right)
 
         return left
-
-    def expr():
-        pass
 
 def run(fn, text):
     lexer = Lexer(fn, text)
